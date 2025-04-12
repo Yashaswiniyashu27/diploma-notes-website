@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diploma C-20 Question Papers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f8f9fa; transition: all 0.3s; }
+        body.dark-mode { background: #121212; color: #f8f9fa; }
+        body.dark-mode .navbar { background: #1e1e1e !important; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        body.dark-mode .nav-link, body.dark-mode .dropdown-item { color: #f8f9fa !important; }
+        body.dark-mode .nav-link:hover, body.dark-mode .dropdown-item:hover { color: #007bff !important; }
+        body.dark-mode .card { background: #1e1e1e; color: #f8f9fa; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        body.dark-mode .card:hover { box-shadow: 0 8px 15px rgba(0,0,0,0.4); }
+        body.dark-mode footer, body.dark-mode .modal-content { background: #1e1e1e; }
+        body.dark-mode .form-control { background: #2d2d2d; color: #f8f9fa; border-color: #444; }
+        body.dark-mode .form-control:focus { border-color: #007bff; }
+        body.dark-mode .alert-info { background-color: #1a3a5a; border-color: #2a4a6a; }
+        
+        .navbar { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; color: #007bff; }
+        .nav-link { font-weight: 500; color: #333; transition: color 0.3s; }
+        .nav-link:hover { color: #007bff; }
+        
+        .hero {
+            background: linear-gradient(120deg, #007bff, #00c6ff);
+            color: white; padding: 5rem 1rem; text-align: center;
+            border-radius: 0 0 50px 50px; animation: gradientMove 5s infinite alternate;
+        }
+        @keyframes gradientMove {
+            0% { background: linear-gradient(120deg, #007bff, #00c6ff); }
+            100% { background: linear-gradient(120deg, #0056b3, #008cff); }
+        }
+        .hero h1 { font-weight: 700; }
+        .hero .btn { border-radius: 25px; padding: 0.75rem 1.5rem; transition: all 0.3s; }
+        .hero .btn:hover { background: #f8f9fa; color: #007bff; }
+        
+        .card { border-radius: 15px; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
+        .card-icon { font-size: 2.5rem; color: #007bff; }
+        .bookmark-btn { position: absolute; top: 10px; right: 10px; border: none; cursor: pointer; }
+        .bookmark-btn.bookmarked { color: #ffc107; }
+        
+        .search-box input { padding-left: 40px; border-radius: 25px; }
+        .search-box i { position: absolute; left: 15px; top: 12px; }
+        
+        .favorite-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #dee2e6; }
+        body.dark-mode .favorite-item { border-bottom-color: #444; }
+        .remove-favorite { color: #dc3545; cursor: pointer; }
+        
+        .dark-mode-toggle { display: flex; align-items: center; cursor: pointer; }
+        
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="#">C-20 Syllabus</a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#years">Years</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#favorites">Favorites</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>              
+                </ul>
+                
+                <div class="dark-mode-toggle" id="darkModeToggle">
+                    <i class="ri-moon-line"></i><span>Dark Mode</span>
+                </div>
+                
+                <div id="auth-buttons" class="d-flex">
+                    <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+                </div>
+                
+                <div id="user-dropdown" class="dropdown" style="display:none;">
+                    <button class="btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                        <i class="ri-user-3-line me-2"></i> <!-- 👤 User icon -->
+                        <span id="username-display">User</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#favorites"><i class="ri-bookmark-line me-2"></i>Favorites</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logout-btn"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <section class="hero">
+        <h1 class="display-4 fw-bold">Diploma Computer Science Notes</h1>
+        <p class="lead">Access previous question papers organized by years & semesters.</p>
+        <div id="guest-cta">
+            <a href="#years" class="btn btn-light btn-lg shadow-sm me-2">Explore Years</a>
+            <button class="btn btn-outline-light btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#registerModal">Register for Full Access</button>
+        </div>
+        <div id="user-cta" style="display:none;">
+            <a href="#years" class="btn btn-light btn-lg shadow-sm">Access All Content</a>
+        </div>
+    </section>
+
+    <section id="search" class="py-3 protected-content">
+        <div class="container" style="max-width:800px;">
+          <div class="position-relative">
+            <i class="ri-search-line position-absolute top-50 start-0 translate-middle-y ps-3 text-muted"></i>
+            <input type="text" class="form-control ps-5 rounded-pill" id="searchInput" placeholder="Search Notes...">
+          </div>
+          <div class="mt-2 text-end">
+            <small class="text-muted">Press Enter to search</small>
+          </div>
+        </div>
+      </section>      
+
+    <section id="favorites" class="py-5 protected-content" style="display:none;">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-4">Your Favorites</h2>
+            <div class="card"><div class="card-body" id="favorites-list">
+                <p class="text-center text-muted">You haven't bookmarked any items yet.</p>
+            </div></div>
+        </div>
+    </section>
+
+    <section id="years" class="py-5">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-4">Select Your Year</h2>
+            <div id="protected-notice" class="alert alert-info text-center">
+                <p>Please <a href="#" class="alert-link" data-bs-toggle="modal" data-bs-target="#loginModal">login</a> or <a href="#" class="alert-link" data-bs-toggle="modal" data-bs-target="#registerModal">register</a> to access all question papers.</p>
+            </div>
+
+            <div class="mb-4 protected-content">
+                <h3 class="text-center text-primary">1st Year</h3>
+                <div class="row justify-content-center">
+                    <div class="col-md-4 mt-3">
+                        <div class="card text-center p-3">
+                            <button class="bookmark-btn" data-item="1st Year - Semester 1"><i class="ri-bookmark-line"></i></button>
+                            <i class="ri-folder-line card-icon"></i>
+                            <h5 class="card-title mt-3">Semester 1</h5>
+                            <a href="semester1.html" class="btn btn-outline-primary btn-sm mt-2">View Subjects</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <div class="card text-center p-3">
+                            <button class="bookmark-btn" data-item="1st Year - Semester 2"><i class="ri-bookmark-line"></i></button>
+                            <i class="ri-folder-line card-icon"></i>
+                            <h5 class="card-title mt-3">Semester 2</h5>
+                            <a href="semester2.html" class="btn btn-outline-primary btn-sm mt-2">View Subjects</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4 protected-content">
+                <h3 class="text-center text-primary">2nd Year</h3>
+                <div class="row justify-content-center">
+                    <div class="col-md-4 mt-3">
+                        <div class="card text-center p-3">
+                            <button class="bookmark-btn" data-item="2nd Year - Semester 3"><i class="ri-bookmark-line"></i></button>
+                            <i class="ri-folder-line card-icon"></i>
+                            <h5 class="card-title mt-3">Semester 3</h5>
+                            <a href="semester3.html" class="btn btn-outline-primary btn-sm mt-2">View Subjects</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <div class="card text-center p-3">
+                            <button class="bookmark-btn" data-item="2nd Year - Semester 4"><i class="ri-bookmark-line"></i></button>
+                            <i class="ri-folder-line card-icon"></i>
+                            <h5 class="card-title mt-3">Semester 4</h5>
+                            <a href="semester4.html" class="btn btn-outline-primary btn-sm mt-2">View Subjects</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4 protected-content">
+                <h3 class="text-center text-primary">3rd Year</h3>
+                <div class="row justify-content-center">
+                    <div class="col-md-4 mt-3">
+                        <div class="card text-center p-3">
+                            <button class="bookmark-btn" data-item="3rd Year - Semester 5"><i class="ri-bookmark-line"></i></button>
+                            <i class="ri-folder-line card-icon"></i>
+                            <h5 class="card-title mt-3">Semester 5</h5>
+                            <a href="semester5.html" class="btn btn-outline-primary btn-sm mt-2">View Subjects</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <div class="card text-center p-3">
+                            <button class="bookmark-btn" data-item="3rd Year - Semester 6"><i class="ri-bookmark-line"></i></button>
+                            <i class="ri-folder-line card-icon"></i>
+                            <h5 class="card-title mt-3">Semester 6</h5>
+                            <a href="semester6.html" class="btn btn-outline-primary btn-sm mt-2">View Subjects</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="search-results" class="mt-5" style="display:none;">
+                <h3 class="text-center mb-4">Search Results</h3>
+                <div class="row" id="results-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Login to Your Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-4 border-0">
+                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#login">Login</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#register">Register</button></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="login">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="register">
+                            <form id="registerForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="registerName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="registerEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="registerPassword" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="registerConfirmPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Register</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container"><p class="mb-0">&copy; 2024 Diploma Computer Science Notes.</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize
+            initDarkMode();
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            user ? showAuthenticatedUI(user) : showGuestUI();
+            
+            // Event Listeners
+            document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
+            document.getElementById('registerForm')?.addEventListener('submit', handleRegister);
+            document.getElementById('logout-btn')?.addEventListener('click', handleLogout);
+            document.getElementById('darkModeToggle')?.addEventListener('click', toggleDarkMode);
+            document.getElementById('searchInput')?.addEventListener('keypress', e => e.key === 'Enter' && performSearch(e.target.value));
+            document.querySelectorAll('.bookmark-btn').forEach(btn => btn.addEventListener('click', handleBookmark));
+            
+            // Functions
+            function handleLogin(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    showAuthenticatedUI(user);
+                    bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                    showToast('Login successful!', 'success');
+                } else {
+                    showToast('Invalid email or password', 'error');
+                }
+            }
+            
+            function handleRegister(e) {
+                e.preventDefault();
+                const name = document.getElementById('registerName').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('registerConfirmPassword').value;
+                
+                if (password !== confirmPassword) return showToast('Passwords do not match', 'error');
+                
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                if (users.some(u => u.email === email)) return showToast('Email already registered', 'error');
+                
+                const newUser = { name, email, password, joined: new Date().toISOString(), favorites: [] };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                
+                showAuthenticatedUI(newUser);
+                bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                showToast('Registration successful!', 'success');
+            }
+            
+            function handleLogout(e) {
+                e.preventDefault();
+                localStorage.removeItem('currentUser');
+                showGuestUI();
+                showToast('Logged out successfully', 'info');
+            }
+            
+            function handleBookmark(e) {
+                e.preventDefault();
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user) return showToast('Please login to bookmark items', 'info');
+                
+                const item = this.getAttribute('data-item');
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const currentUserIndex = users.findIndex(u => u.email === user.email);
+                if (currentUserIndex === -1) return;
+                
+                const favorites = users[currentUserIndex].favorites || [];
+                const itemIndex = favorites.indexOf(item);
+                
+                if (itemIndex === -1) {
+                    favorites.push(item);
+                    this.innerHTML = '<i class="ri-bookmark-fill"></i>';
+                    this.classList.add('bookmarked');
+                    showToast('Added to favorites', 'success');
+                } else {
+                    favorites.splice(itemIndex, 1);
+                    this.innerHTML = '<i class="ri-bookmark-line"></i>';
+                    this.classList.remove('bookmarked');
+                    showToast('Removed from favorites', 'info');
+                }
+                
+                users[currentUserIndex].favorites = favorites;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(users[currentUserIndex]));
+                if (window.location.hash === '#favorites') loadFavorites();
+            }
+            
+            function showAuthenticatedUI(user) {
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('user-dropdown').style.display = 'block';
+                document.getElementById('username-display').textContent = user.name.split(' ')[0];
+                document.getElementById('guest-cta').style.display = 'none';
+                document.getElementById('user-cta').style.display = 'block';
+                document.getElementById('protected-notice').style.display = 'none';
+                document.querySelectorAll('.protected-content').forEach(el => el.style.display = 'block');
+                initBookmarkButtons(user);
+                loadFavorites();
+            }
+            
+            function showGuestUI() {
+                document.getElementById('auth-buttons').style.display = 'flex';
+                document.getElementById('user-dropdown').style.display = 'none';
+                document.getElementById('guest-cta').style.display = 'block';
+                document.getElementById('user-cta').style.display = 'none';
+                document.getElementById('protected-notice').style.display = 'block';
+                document.querySelectorAll('.protected-content').forEach(el => el.style.display = 'none');
+            }
+            
+            function initBookmarkButtons(user) {
+                if (user?.favorites) {
+                    document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                        const item = btn.getAttribute('data-item');
+                        if (user.favorites.includes(item)) {
+                            btn.innerHTML = '<i class="ri-bookmark-fill"></i>';
+                            btn.classList.add('bookmarked');
+                        } else {
+                            btn.innerHTML = '<i class="ri-bookmark-line"></i>';
+                            btn.classList.remove('bookmarked');
+                        }
+                    });
+                }
+            }
+            
+            function loadFavorites() {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                const favoritesList = document.getElementById('favorites-list');
+                
+                if (user?.favorites?.length > 0) {
+                    favoritesList.innerHTML = '';
+                    user.favorites.forEach(item => {
+                        const favoriteItem = document.createElement('div');
+                        favoriteItem.className = 'favorite-item';
+                        favoriteItem.innerHTML = `
+                            <span>${item}</span>
+                            <a href="#" class="remove-favorite" data-item="${item}"><i class="ri-close-line"></i></a>
+                        `;
+                        favoritesList.appendChild(favoriteItem);
+                    });
+                    
+                    document.querySelectorAll('.remove-favorite').forEach(btn => {
+                        btn.addEventListener('click', e => {
+                            e.preventDefault();
+                            removeFavorite(btn.getAttribute('data-item'));
+                        });
+                    });
+                } else {
+                    favoritesList.innerHTML = '<p class="text-center text-muted">You haven\'t bookmarked any items yet.</p>';
+                }
+            }
+            
+            function removeFavorite(item) {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const currentUserIndex = users.findIndex(u => u.email === user.email);
+                if (currentUserIndex === -1) return;
+                
+                const favorites = users[currentUserIndex].favorites || [];
+                const itemIndex = favorites.indexOf(item);
+                if (itemIndex === -1) return;
+                
+                favorites.splice(itemIndex, 1);
+                users[currentUserIndex].favorites = favorites;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(users[currentUserIndex]));
+                loadFavorites();
+                initBookmarkButtons(users[currentUserIndex]);
+                showToast('Removed from favorites', 'info');
+            }
+            
+            function performSearch(query) {
+                if (!query.trim()) {
+                    document.getElementById('search-results').style.display = 'none';
+                    return;
+                }
+                
+                const results = [
+                    { title: 'Semester 1', year: '1st Year', link: 'semester1.html' },
+                    { title: 'Semester 2', year: '1st Year', link: 'semester2.html' },
+                    { title: 'Semester 3', year: '2nd Year', link: 'semester3.html' },
+                    { title: 'Semester 4', year: '2nd Year', link: 'semester4.html' },
+                    { title: 'Semester 5', year: '3rd Year', link: 'semester5.html' },
+                    { title: 'Semester 6', year: '3rd Year', link: 'semester6.html' },
+                ].filter(item => 
+                    item.title.toLowerCase().includes(query.toLowerCase()) || 
+                    item.year.toLowerCase().includes(query.toLowerCase())
+                );
+                
+                const resultsContainer = document.getElementById('results-container');
+                resultsContainer.innerHTML = results.length > 0 ? 
+                    results.map(result => `
+                        <div class="col-md-4 mt-3">
+                            <div class="card text-center p-3">
+                                <i class="ri-file-text-line card-icon"></i>
+                                <h5 class="card-title mt-3">${result.title}</h5>
+                                <p class="text-muted">${result.year}</p>
+                                <a href="${result.link}" class="btn btn-outline-primary btn-sm mt-2">View Notes</a>
+                            </div>
+                        </div>
+                    `).join('') : '<p class="text-center text-muted">No results found</p>';
+                
+                document.getElementById('search-results').style.display = 'block';
+            }
+            
+            function initDarkMode() {
+                const darkMode = localStorage.getItem('darkMode') === 'true';
+                if (darkMode) {
+                    document.body.classList.add('dark-mode');
+                    document.querySelector('#darkModeToggle i').className = 'ri-sun-line';
+                    document.querySelector('#darkModeToggle span').textContent = 'Light Mode';
+                }
+            }
+            
+            function toggleDarkMode() {
+                const body = document.body;
+                const darkModeToggle = document.querySelector('#darkModeToggle i');
+                const darkModeText = document.querySelector('#darkModeToggle span');
+                
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    darkModeToggle.className = 'ri-moon-line';
+                    darkModeText.textContent = 'Dark Mode';
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    body.classList.add('dark-mode');
+                    darkModeToggle.className = 'ri-sun-line';
+                    darkModeText.textContent = 'Light Mode';
+                    localStorage.setItem('darkMode', 'true');
+                }
+            }
+            
+            function showToast(message, type) {
+                const toast = document.createElement('div');
+                toast.className = `toast bg-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} text-white mb-2`;
+                toast.innerHTML = `
+                    <div class="d-flex justify-content-between p-3">
+                        <div>${message}</div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                `;
+                document.getElementById('toastContainer').appendChild(toast);
+                const bsToast = new bootstrap.Toast(toast, { autohide: true, delay: 3000 });
+                bsToast.show();
+                toast.addEventListener('hidden.bs.toast', () => toast.remove());
+            }
+        });
+    </script>
+</body>
+</html>
