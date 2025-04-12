@@ -77,7 +77,7 @@
                 
                 <div id="auth-buttons" class="d-flex">
                     <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Register</button>
                 </div>
                 
                 <div id="user-dropdown" class="dropdown" style="display:none;">
@@ -321,6 +321,7 @@
                 showAuthenticatedUI(newUser);
                 bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
                 showToast('Registration successful!', 'success');
+                document.getElementById('registerForm').reset();
             }
             
             function handleLogout(e) {
